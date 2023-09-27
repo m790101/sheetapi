@@ -3,16 +3,11 @@ const { google } = require("googleapis");
 
 const app = express();
 app.set("view engine", "ejs");
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
 
 
 // CORS All Request
 const allowCrossDomain = (req, res, next) => {
-    // let allowedOrigins = ['http://localhost:8081', 'http://127.0.0.1:8081']
-    // let origin = req.headers.origin
-    // if (allowedOrigins.includes(origin)) {
-    //   res.header('Access-Control-Allow-Origin', origin)
-    // }
     res.header('Access-Control-Allow-Origin', req.headers.origin)
     res.header('Access-Control-Allow-Credentials', 'true')
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
@@ -30,29 +25,7 @@ app.get("/", async(req, res) => {
         keyFile: "credentials.json",
         scopes: "https://www.googleapis.com/auth/spreadsheets",
       });
-
-    // const client = await auth.getClient();
-
-    // Instance of Google Sheets API
-//     const googleSheets = google.sheets({ version: "v4", auth: client });
-
-//     const spreadsheetId = "1JOI3bsoUtouqjy83TKuCyYPOo9TuF5_bPV_kevu0P_I";
-
-//     const metaData = await googleSheets.spreadsheets.get({
-//         auth,
-//         spreadsheetId,
-//       });
-
-//       //read row from spreadsheet   
-//         const getRows = await googleSheets.spreadsheets.values.get({
-//             auth,
-//             spreadsheetId,
-//             range: "Sheet1",
-//         });
-
-
-
-      res.render('index')
+      res.send('yoooo')
 
 })
 
@@ -104,8 +77,9 @@ app.post("/", async (req, res) => {
 
 
   app.post("/add/row", async (req, res) => {
-    const { request, name } = req.body;
-  
+    const { id } = req.body;
+
+    console.log(req.body,id)
     const auth = new google.auth.GoogleAuth({
       keyFile: "credentials.json",
       scopes: "https://www.googleapis.com/auth/spreadsheets",
@@ -119,28 +93,14 @@ app.post("/", async (req, res) => {
   
     const spreadsheetId = "1JOI3bsoUtouqjy83TKuCyYPOo9TuF5_bPV_kevu0P_I";
   
-    // Get metadata about spreadsheet
-    const metaData = await googleSheets.spreadsheets.get({
-      auth,
-      spreadsheetId,
-    });
-  
-    // Read rows from spreadsheet
-    const getRows = await googleSheets.spreadsheets.values.get({
-      auth,
-      spreadsheetId,
-      range: "Sheet1!A:A",
-    });
-
-  
     // Write row(s) to spreadsheet
-    await googleSheets.spreadsheets.values.append({
+    await googleSheets.spreadsheets.values.update({
       auth,
       spreadsheetId,
-      range: "Sheet1!A:B",
+      range: `Sheet1!G${id}`,
       valueInputOption: "RAW",
       resource: {
-        values: [[123,12333333999]],
+        values: [[123]],
       },
     });
   
