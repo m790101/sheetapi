@@ -1,0 +1,19 @@
+# mac misc
+.DS_Store
+
+# node modules
+/node_modules
+
+# log files
+/*.log
+
+# env file
+.env
+
+# war file
+/*.war
+
+# ide files
+/.vscode
+/.settings/
+/credentials.json
